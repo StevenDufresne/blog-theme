@@ -8,6 +8,10 @@
 get_header();
 
 $current_post_slug = get_queried_object_id() ? get_post_field( 'post_name', get_queried_object_id() ) : '';
+$entry_command     = sprintf(
+	'cat ~/entries/%s.md',
+	$current_post_slug ? $current_post_slug : __( 'current', 'lab-notes' )
+);
 $related_command   = sprintf(
 	'find ~/entries -type f -not -name %s',
 	$current_post_slug ? $current_post_slug : __( 'current', 'lab-notes' )
@@ -22,7 +26,7 @@ $related_command   = sprintf(
 				<div class="window-title window-nav-title">
 					<a class="back-link" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Back to Index', 'lab-notes' ); ?></a>
 					<span class="title-separator" aria-hidden="true">|</span>
-					<span>cat ~/entries/latest-field-report.md</span>
+					<span><?php echo esc_html( $entry_command ); ?></span>
 				</div>
 			</div>
 			<div class="window-body">

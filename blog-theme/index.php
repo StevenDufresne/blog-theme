@@ -32,7 +32,7 @@ $projects_url   = get_category_by_slug( 'projects' ) ? get_category_link( get_ca
 		<section class="window wide note-feature" aria-labelledby="feature-title">
 			<div class="window-bar">
 				<div class="lights" aria-hidden="true"></div>
-				<div class="window-title" id="feature-title">cat ~/entries/latest-field-report.md</div>
+				<div class="window-title" id="feature-title">cat ~/entries/latest.md</div>
 			</div>
 			<div class="window-body feature-body">
 				<?php if ( $featured_query->have_posts() ) : ?>
