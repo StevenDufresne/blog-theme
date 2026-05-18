@@ -32,6 +32,11 @@
 		);
 
 		echo '<nav class="path-list" aria-label="' . esc_attr__( 'Categories', 'lab-notes' ) . '">';
+		printf(
+			'<a class="path-link" href="%s">%s</a>',
+			esc_url( home_url( '/' ) ),
+			esc_html__( '~/home', 'lab-notes' )
+		);
 		if ( $categories ) {
 			foreach ( $categories as $category ) {
 				printf(
