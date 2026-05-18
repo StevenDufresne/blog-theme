@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Building a calmer publishing workflow inside WordPress / Steve D</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Mono:wght@400;500;600&display=swap");
+
+    :root {
+      color-scheme: dark;
+      --bg: #090909;
+      --text: #eeeeea;
+      --muted: #9aa3a3;
+      --body: #b9beb9;
+      --line: rgba(255, 255, 255, 0.075);
+      --line-strong: rgba(255, 255, 255, 0.14);
+      --accent: #d7e82a;
+      --panel: #090909;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+      --radius: 6px;
+      --sans: "Noto Sans", "Inter", "Helvetica Neue", Arial, ui-sans-serif, system-ui, sans-serif;
+      --mono: "Noto Sans Mono", "Roboto Mono", "SFMono-Regular", "Cascadia Code", Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.18em;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    .app-shell {
+      width: min(1540px, 100%);
+      margin: 0 auto;
+      padding: 54px;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: minmax(243px, 342px) minmax(0, 1fr);
+      gap: 48px;
+      align-items: start;
+      min-width: 0;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 54px;
+      display: grid;
+      gap: 24px;
+      min-width: 0;
+      max-width: 100%;
+      padding-top: 88px;
+    }
+
+    .profile,
+    .stack-card {
+      display: grid;
+      gap: 22px;
+    }
+
+    .portrait {
+      width: 119px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: #f5f5f0;
+    }
+
+    .profile h2,
+    .post-title,
+    .related-item h3 {
+      margin: 0;
+      color: var(--text);
+      font-weight: 560;
+      letter-spacing: -0.02em;
+    }
+
+    .profile h2 {
+      font-size: clamp(1.45rem, 2vw, 1.85rem);
+      line-height: 1.15;
+    }
+
+    .handle,
+    .window-title,
+    .post-meta,
+    .eyebrow,
+    .related-meta,
+    .mini-pill {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 430;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+
+    .handle {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--accent);
+    }
+
+    .handle.is-offline {
+      color: var(--muted);
+    }
+
+    .handle.is-offline .status-dot {
+      background: #5f6462;
+    }
+
+    .profile-copy,
+    .post-dek,
+    .post-body p,
+    .post-body li,
+    .related-item p {
+      margin: 0;
+      color: var(--body);
+      font-size: 0.88rem;
+      font-weight: 400;
+      line-height: 1.62;
+    }
+
+    .profile-copy,
+    .related-item p {
+      font-size: 0.82rem;
+      line-height: 1.48;
+    }
+
+    .chips,
+    .post-meta,
+    .post-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .chip,
+    .mini-pill,
+    .post-meta span,
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      background: var(--panel);
+      color: var(--text);
+      font-size: 0.72rem;
+      font-weight: 500;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      color: var(--accent);
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .window {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .window-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-height: 58px;
+      padding: 0 18px;
+      background: var(--panel);
+    }
+
+    .window-title {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      font-family: var(--mono);
+      text-overflow: ellipsis;
+      text-transform: none;
+      white-space: nowrap;
+    }
+
+    .lights {
+      position: relative;
+      flex: 0 0 auto;
+      width: 37px;
+      height: 7px;
+    }
+
+    .lights::before {
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 7px;
+      height: 7px;
+      content: "";
+      border-radius: 3px;
+      background: #d9d9d4;
+      box-shadow: 15px 0 0 #d9d9d4, 30px 0 0 #d9d9d4;
+    }
+
+    .window-body {
+      padding: 18px;
+    }
+
+    .post-shell {
+      display: grid;
+      gap: 34px;
+      max-width: 920px;
+      padding: clamp(18px, 4vw, 48px);
+    }
+
+    .post-header {
+      display: grid;
+      gap: 18px;
+    }
+
+    .post-title {
+      max-width: 780px;
+      font-size: clamp(1.8rem, 4vw, 3.45rem);
+      line-height: 1.03;
+    }
+
+    .post-dek {
+      max-width: 720px;
+      font-size: clamp(0.98rem, 1.5vw, 1.12rem);
+      line-height: 1.56;
+    }
+
+    .post-body {
+      display: grid;
+      gap: 20px;
+      max-width: 700px;
+    }
+
+    .post-body h2 {
+      margin: 14px 0 0;
+      color: var(--text);
+      font-size: 0.98rem;
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+
+    .post-body ul {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+
+    .post-note {
+      display: grid;
+      gap: 10px;
+      max-width: 700px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .related-list {
+      display: grid;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .related-item {
+      display: grid;
+      grid-template-columns: 12px minmax(0, 1fr);
+      gap: 14px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .related-item:last-child {
+      border-bottom: 0;
+    }
+
+    .related-copy {
+      display: grid;
+      gap: 6px;
+    }
+
+    .related-item h3 {
+      font-size: 0.92rem;
+      line-height: 1.38;
+    }
+
+    .type-dot {
+      width: 7px;
+      height: 7px;
+      margin-top: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .type-dot.note {
+      background: #d7e82a;
+    }
+
+    .type-dot.project {
+      background: #7db7ff;
+    }
+
+    .type-dot.skill {
+      background: #b890ff;
+    }
+
+    @media (max-width: 1200px) {
+      .app-shell {
+        padding: 28px;
+      }
+
+      .dashboard {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .sidebar {
+        position: static;
+        padding-top: 0;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .app-shell {
+        padding: 12px;
+      }
+
+      .dashboard,
+      .main-grid,
+      .window {
+        min-width: 0;
+      }
+
+      .window-title,
+      .post-title,
+      .related-item h3 {
+        overflow-wrap: anywhere;
+      }
+
+      .post-shell {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <main class="dashboard">
+      <aside class="sidebar" aria-label="Profile and topics">
+        <section class="profile">
+          <div class="portrait" aria-hidden="true"></div>
+          <h2>Steve D</h2>
+          <div class="handle"><div class="status-dot" aria-hidden="true"></div><span id="availability-status">offline</span></div>
+          <p class="profile-copy">Notes from building, breaking, testing, and refining tools for the web.</p>
+        </section>
+
+        <section class="stack-card" aria-label="Topics">
+          <div class="chips">
+            <a class="chip" href="index.html">WordPress</a>
+            <a class="chip" href="index.html">Automation</a>
+            <a class="chip" href="index.html">AI Tools</a>
+            <a class="chip" href="index.html">Frontend</a>
+            <a class="chip" href="index.html">Notes</a>
+          </div>
+        </section>
+      </aside>
+
+      <section class="main-grid">
+        <article class="window" aria-labelledby="post-title">
+          <div class="window-bar">
+            <div class="lights" aria-hidden="true"></div>
+            <div class="window-title">cat ~/entries/latest-field-report.md</div>
+          </div>
+          <div class="window-body">
+            <div class="post-shell">
+              <a class="back-link" href="index.html">back to index</a>
+
+              <header class="post-header">
+                <div class="post-meta">
+                  <span>Field Note</span>
+                  <span>2026-05-17</span>
+                  <span>8 min</span>
+                </div>
+                <h1 class="post-title" id="post-title">Building a calmer publishing workflow inside WordPress</h1>
+                <p class="post-dek">What changed after treating the editor like a workspace instead of a form: fewer decisions, cleaner drafts, and a better path from rough notes to finished posts.</p>
+              </header>
+
+              <div class="post-body">
+                <p>The useful shift was small: stop asking the admin screen to be everything. I wanted the writing surface to feel closer to a working notebook, where structure appears when it helps and gets out of the way when it does not.</p>
+                <p>That meant designing around the handful of states a post actually moves through: rough capture, shaped outline, checked examples, edited draft, and published reference. The interface became calmer once each state had an obvious place to live.</p>
+
+                <h2>What Stayed</h2>
+                <p>The core WordPress model still makes sense. Posts, categories, reusable blocks, and custom fields are enough for most of this. The theme should expose those pieces clearly instead of inventing a second editorial system on top.</p>
+
+                <h2>What Changed</h2>
+                <ul>
+                  <li>Post links lead with the title, not the surrounding card.</li>
+                  <li>Entry types use small visual markers instead of heavy badges.</li>
+                  <li>Metadata stays visible, but it does not compete with the writing.</li>
+                </ul>
+
+                <p>The next pass should make each content type feel deliberate without making the whole page noisy. Notes can stay light. Projects can show status. Skills can feel reusable. Longform can get a little more room.</p>
+              </div>
+
+              <aside class="post-note" aria-label="Implementation note">
+                <div class="eyebrow">implementation note</div>
+                <p>This template is intentionally static for now. When it becomes WordPress, this maps cleanly to <code>single.php</code>: title, excerpt, date, type, body, and related entries.</p>
+              </aside>
+            </div>
+          </div>
+        </article>
+
+        <section class="window" aria-labelledby="related-title">
+          <div class="window-bar">
+            <div class="lights" aria-hidden="true"></div>
+            <div class="window-title" id="related-title">find ~/entries -type f -not -name latest</div>
+          </div>
+          <div class="window-body">
+            <div class="related-list">
+              <article class="related-item">
+                <div class="type-dot note" aria-hidden="true"></div>
+                <div class="related-copy">
+                  <span class="related-meta">Note</span>
+                  <h3><a href="single.html">What I changed after a week of writing in blocks</a></h3>
+                  <p>A short field note on simplifying drafts and reusable sections.</p>
+                </div>
+              </article>
+              <article class="related-item">
+                <div class="type-dot project" aria-hidden="true"></div>
+                <div class="related-copy">
+                  <span class="related-meta">Project</span>
+                  <h3><a href="single.html">Testing a no-dashboard WordPress author flow</a></h3>
+                  <p>A prototype for moving from local notes to publishable entries.</p>
+                </div>
+              </article>
+              <article class="related-item">
+                <div class="type-dot skill" aria-hidden="true"></div>
+                <div class="related-copy">
+                  <span class="related-meta">Skill</span>
+                  <h3><a href="single.html">A tiny checklist for publishing technical posts</a></h3>
+                  <p>A reusable review pass for examples, assumptions, and handoff.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const availabilityStatus = document.querySelector("#availability-status");
+
+    function updateAvailability() {
+      const hourInSeoul = Number(new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        hour12: false,
+        timeZone: "Asia/Seoul"
+      }).format(new Date()));
+      const isOnline = hourInSeoul >= 8 && hourInSeoul < 17;
+
+      availabilityStatus.textContent = isOnline ? "online" : "offline";
+      availabilityStatus.closest(".handle").classList.toggle("is-offline", !isOnline);
+    }
+
+    updateAvailability();
+    window.setInterval(updateAvailability, 60000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Steve D / Lab Notes</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Mono:wght@400;500;600&display=swap");
+
+    :root {
+      color-scheme: dark;
+      --bg: #090909;
+      --text: #eeeeea;
+      --muted: #9aa3a3;
+      --body: #b9beb9;
+      --line: rgba(255, 255, 255, 0.075);
+      --line-strong: rgba(255, 255, 255, 0.14);
+      --accent: #d7e82a;
+      --panel: #090909;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+      --radius: 6px;
+      --sans: "Noto Sans", "Inter", "Helvetica Neue", Arial, ui-sans-serif, system-ui, sans-serif;
+      --mono: "Noto Sans Mono", "Roboto Mono", "SFMono-Regular", "Cascadia Code", Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.18em;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    .app-shell {
+      width: min(1540px, 100%);
+      margin: 0 auto;
+      padding: 54px;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: minmax(243px, 342px) minmax(0, 1fr);
+      gap: 48px;
+      align-items: start;
+      min-width: 0;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 54px;
+      display: grid;
+      gap: 24px;
+      min-width: 0;
+      max-width: 100%;
+      padding-top: 88px;
+    }
+
+    .profile,
+    .stack-card {
+      display: grid;
+      gap: 22px;
+    }
+
+    .portrait {
+      width: 119px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: #f5f5f0;
+    }
+
+    .portrait img {
+      display: none;
+    }
+
+    .profile h2,
+    .feature-body h2,
+    .entry-copy h3,
+    .repo h3,
+    .timeline-item h3 {
+      margin: 0;
+      color: var(--text);
+      font-weight: 560;
+      letter-spacing: -0.02em;
+    }
+
+    .profile h2 {
+      font-size: clamp(1.45rem, 2vw, 1.85rem);
+      line-height: 1.15;
+    }
+
+    .handle,
+    .window-title,
+    .note-meta,
+    .feature-footer,
+    .date,
+    .count,
+    .mini-pill {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 430;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+
+    .handle {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--accent);
+    }
+
+    .handle.is-offline {
+      color: var(--muted);
+    }
+
+    .handle.is-offline .status-dot {
+      background: #5f6462;
+    }
+
+    .profile-copy,
+    .repo p,
+    .timeline-item p {
+      margin: 0;
+      color: var(--body);
+      font-size: 0.82rem;
+      font-weight: 400;
+      line-height: 1.48;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .chip,
+    .mini-pill,
+    .note-meta span,
+    .feature-footer span,
+    .read-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      background: var(--panel);
+      color: var(--text);
+      font-size: 0.72rem;
+      font-weight: 500;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .read-link {
+      color: var(--accent);
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    .window {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .window-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-height: 58px;
+      padding: 0 18px;
+      background: var(--panel);
+    }
+
+    .window-title {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      font-family: var(--mono);
+      text-overflow: ellipsis;
+      text-transform: none;
+      white-space: nowrap;
+    }
+
+    .lights {
+      position: relative;
+      flex: 0 0 auto;
+      width: 37px;
+      height: 7px;
+    }
+
+    .lights::before {
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 7px;
+      height: 7px;
+      content: "";
+      border-radius: 3px;
+      background: #d9d9d4;
+      box-shadow: 15px 0 0 #d9d9d4, 30px 0 0 #d9d9d4;
+    }
+
+    .window-body {
+      padding: 18px;
+    }
+
+    .feature-body {
+      display: grid;
+      align-content: center;
+      gap: 22px;
+      min-height: 360px;
+    }
+
+    .note-meta,
+    .feature-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .feature-body h2 {
+      max-width: 760px;
+      font-size: clamp(1.4rem, 2.35vw, 2.3rem);
+      line-height: 1.1;
+    }
+
+    .feature-title-link {
+      color: inherit;
+    }
+
+    .feature-body p {
+      max-width: 720px;
+      margin: 0;
+      color: var(--body);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .feature-footer {
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .article-list,
+    .repo-grid,
+    .timeline {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .article-row {
+      display: grid;
+      grid-template-columns: 12px minmax(0, 1fr) max-content;
+      gap: 14px;
+      align-items: start;
+      min-height: 104px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .article-row:last-child,
+    .repo:last-child,
+    .timeline-item:last-child {
+      border-bottom: 0;
+    }
+
+    .entry-copy {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .entry-copy h3,
+    .repo h3,
+    .timeline-item h3 {
+      font-size: 0.92rem;
+      line-height: 1.38;
+    }
+
+    .entry-copy h3 {
+      font-weight: 450;
+    }
+
+    .entry-copy p {
+      margin: 0;
+      color: var(--body);
+      font-size: 0.82rem;
+      line-height: 1.48;
+    }
+
+    .type-dot {
+      width: 7px;
+      height: 7px;
+      margin-top: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .type-dot.note {
+      background: #d7e82a;
+    }
+
+    .type-dot.project {
+      background: #7db7ff;
+    }
+
+    .type-dot.skill {
+      background: #b890ff;
+    }
+
+    .type-dot.long {
+      background: #f2a65a;
+    }
+
+    .count {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .repo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      overflow: hidden;
+    }
+
+    .repo {
+      display: grid;
+      align-content: start;
+      gap: 14px;
+      min-height: 170px;
+      padding: 16px;
+      border-right: 1px solid var(--line);
+    }
+
+    .repo:last-child {
+      border-right: 0;
+    }
+
+    .repo-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .timeline {
+      display: grid;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 12px minmax(0, 1fr);
+      gap: 14px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .timeline-dot {
+      width: 7px;
+      height: 7px;
+      margin-top: 7px;
+      border-radius: 3px;
+      background: var(--accent);
+    }
+
+    @media (max-width: 1200px) {
+      .app-shell {
+        padding: 28px;
+      }
+
+      .dashboard {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .sidebar {
+        position: static;
+        padding-top: 0;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .app-shell {
+        padding: 12px;
+      }
+
+      .dashboard,
+      .main-grid,
+      .window {
+        min-width: 0;
+      }
+
+      .main-grid,
+      .repo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .window-title,
+      .feature-body h2,
+      .entry-copy h3,
+      .repo h3,
+      .timeline-item h3 {
+        overflow-wrap: anywhere;
+      }
+
+      .feature-body h2 {
+        font-size: clamp(1.25rem, 8vw, 1.75rem);
+      }
+
+      .feature-body {
+        min-height: 0;
+      }
+
+      .article-row,
+      .repo,
+      .timeline-item {
+        border-right: 0;
+      }
+
+      .repo {
+        border-bottom: 1px solid var(--line);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <main class="dashboard" id="overview">
+      <aside class="sidebar" aria-label="Profile and topics">
+        <section class="profile">
+          <div class="portrait" aria-hidden="true"></div>
+          <h2>Steve D</h2>
+          <div class="handle"><div class="status-dot" aria-hidden="true"></div><span id="availability-status">offline</span></div>
+          <p class="profile-copy">Notes from building, breaking, testing, and refining tools for the web.</p>
+        </section>
+
+        <section class="stack-card" aria-label="Topics">
+          <div class="chips">
+            <a class="chip" href="#articles">WordPress</a>
+            <a class="chip" href="#projects">Automation</a>
+            <a class="chip" href="#projects">AI Tools</a>
+            <a class="chip" href="#projects">Frontend</a>
+            <a class="chip" href="#articles">Notes</a>
+          </div>
+        </section>
+      </aside>
+
+      <section class="main-grid">
+        <section class="window wide note-feature" aria-labelledby="feature-title">
+          <div class="window-bar">
+            <div class="lights" aria-hidden="true"></div>
+            <div class="window-title" id="feature-title">cat ~/entries/latest-field-report.md</div>
+          </div>
+          <div class="window-body feature-body">
+            <div class="note-meta">
+              <span>Field Note</span>
+              <span>2026-05-17</span>
+              <span>Web Workflows</span>
+            </div>
+            <h2><a class="feature-title-link" href="single.html">Building a calmer publishing workflow inside WordPress</a></h2>
+            <p>What changed after treating the editor like a workspace instead of a form: fewer decisions, cleaner drafts, and a better path from rough notes to finished posts.</p>
+            <div class="feature-footer">
+              <a class="read-link" href="single.html">read note</a>
+              <span>8 min</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="window wide" id="articles" aria-labelledby="articles-title">
+          <div class="window-bar">
+            <div class="lights" aria-hidden="true"></div>
+            <div class="window-title" id="articles-title">ls -t ~/entries | head -n 6</div>
+          </div>
+          <div class="window-body">
+            <div class="article-list">
+              <div class="article-row">
+                <div class="type-dot note" aria-hidden="true"></div>
+                <div class="entry-copy">
+                  <span class="date">Note</span>
+                  <h3><a href="single.html">What I changed after a week of writing in blocks</a></h3>
+                  <p>A short field note on simplifying drafts, reusable sections, and the limits of block patterns.</p>
+                </div>
+                <span class="count">05/17/2026</span>
+              </div>
+              <div class="article-row">
+                <div class="type-dot project" aria-hidden="true"></div>
+                <div class="entry-copy">
+                  <span class="date">Project</span>
+                  <h3><a href="single.html">Testing a no-dashboard WordPress author flow</a></h3>
+                  <p>A prototype for moving from local notes to publishable entries with fewer admin screens.</p>
+                </div>
+                <span class="count">05/12/2026</span>
+              </div>
+              <div class="article-row">
+                <div class="type-dot skill" aria-hidden="true"></div>
+                <div class="entry-copy">
+                  <span class="date">Skill</span>
+                  <h3><a href="single.html">A tiny checklist for publishing technical posts</a></h3>
+                  <p>A reusable review pass for examples, assumptions, screenshots, and reader handoff.</p>
+                </div>
+                <span class="count">05/09/2026</span>
+              </div>
+              <div class="article-row">
+                <div class="type-dot long" aria-hidden="true"></div>
+                <div class="entry-copy">
+                  <span class="date">Longform</span>
+                  <h3><a href="single.html">The difference between a website and a working surface</a></h3>
+                  <p>A longer essay about interfaces that support ongoing work instead of one-time visits.</p>
+                </div>
+                <span class="count">05/01/2026</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="window wide" id="projects" aria-labelledby="projects-title">
+          <div class="window-bar">
+            <div class="lights" aria-hidden="true"></div>
+            <div class="window-title" id="projects-title">ls ~/github/projects</div>
+          </div>
+          <div class="window-body">
+            <div class="repo-grid">
+              <article class="repo">
+                <h3><a href="single.html">Block-first article templates</a></h3>
+                <p>A test set of reusable post structures for tutorials, field notes, and technical reviews.</p>
+                <div class="repo-meta"><span class="mini-pill">Project</span><span class="mini-pill">Active</span></div>
+              </article>
+              <article class="repo">
+                <h3><a href="single.html">Local notes to WordPress</a></h3>
+                <p>A lightweight path for turning rough Markdown notes into edited, publishable drafts.</p>
+                <div class="repo-meta"><span class="mini-pill">Prototype</span><span class="mini-pill">Drafting</span></div>
+              </article>
+              <article class="repo">
+                <h3><a href="single.html">Editorial dashboard theme</a></h3>
+                <p>A modular theme direction that treats posts, skills, and projects as first-class objects.</p>
+                <div class="repo-meta"><span class="mini-pill">Theme</span><span class="mini-pill">Designing</span></div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="window wide" aria-labelledby="skills-title">
+          <div class="window-bar">
+            <div class="lights" aria-hidden="true"></div>
+            <div class="window-title" id="skills-title">ls ~/.claude/skills</div>
+          </div>
+          <div class="window-body">
+            <div class="timeline">
+              <article class="timeline-item">
+                <div class="timeline-dot" aria-hidden="true"></div>
+                <div>
+                  <h3><a href="single.html">Draft cleanup checklist</a></h3>
+                  <p>Remove throat-clearing, check headings, tighten the first paragraph.</p>
+                </div>
+              </article>
+              <article class="timeline-item">
+                <div class="timeline-dot" aria-hidden="true"></div>
+                <div>
+                  <h3><a href="single.html">Reusable code block pattern</a></h3>
+                  <p>Store language, filename, summary, and source link together.</p>
+                </div>
+              </article>
+              <article class="timeline-item">
+                <div class="timeline-dot" aria-hidden="true"></div>
+                <div>
+                  <h3><a href="single.html">Post idea intake</a></h3>
+                  <p>Capture question, example, failure mode, and next test.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const availabilityStatus = document.querySelector("#availability-status");
+
+    function updateAvailability() {
+      const hourInSeoul = Number(new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        hour12: false,
+        timeZone: "Asia/Seoul"
+      }).format(new Date()));
+      const isOnline = hourInSeoul >= 8 && hourInSeoul < 17;
+
+      availabilityStatus.textContent = isOnline ? "online" : "offline";
+      availabilityStatus.closest(".handle").classList.toggle("is-offline", !isOnline);
+    }
+
+    updateAvailability();
+    window.setInterval(updateAvailability, 60000);
+  </script>
+</body>
+</html>
