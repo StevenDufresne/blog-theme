@@ -1,0 +1,66 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": true,
+    "color": {
+      "palette": [
+        {
+          "slug": "background",
+          "color": "#090909",
+          "name": "Background"
+        },
+        {
+          "slug": "text",
+          "color": "#eeeeea",
+          "name": "Text"
+        },
+        {
+          "slug": "muted",
+          "color": "#9aa3a3",
+          "name": "Muted"
+        },
+        {
+          "slug": "accent",
+          "color": "#d7e82a",
+          "name": "Accent"
+        }
+      ]
+    },
+    "layout": {
+      "contentSize": "920px",
+      "wideSize": "1540px"
+    },
+    "spacing": {
+      "units": [
+        "px",
+        "rem",
+        "vw",
+        "%"
+      ]
+    },
+    "typography": {
+      "fontFamilies": [
+        {
+          "fontFamily": "\"Noto Sans\", \"Inter\", \"Helvetica Neue\", Arial, sans-serif",
+          "slug": "noto-sans",
+          "name": "Noto Sans"
+        },
+        {
+          "fontFamily": "\"Noto Sans Mono\", \"Roboto Mono\", Consolas, monospace",
+          "slug": "noto-sans-mono",
+          "name": "Noto Sans Mono"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "#090909",
+      "text": "#eeeeea"
+    },
+    "typography": {
+      "fontFamily": "var(--wp--preset--font-family--noto-sans)"
+    }
+  }
+}

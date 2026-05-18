@@ -1,0 +1,9 @@
+{
+  "name": "lab-notes-theme",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "wp-now": "npx @wp-now/wp-now start --path=./blog-theme --skip-browser",
+    "start": "npm run wp-now"
+  }
+}
