@@ -82,7 +82,7 @@ $related_command   = sprintf(
 			</div>
 		</article>
 
-		<section class="window" aria-labelledby="related-title">
+		<!-- <section class="window" aria-labelledby="related-title">
 			<div class="window-bar">
 				<div class="lights" aria-hidden="true"></div>
 				<div class="window-title" id="related-title"><?php echo esc_html( $related_command ); ?></div>
@@ -101,7 +101,7 @@ $related_command   = sprintf(
 					<?php endforeach; ?>
 				</div>
 			</div>
-		</section>
+		</section> -->
 	</section>
 </main>
 <?php
