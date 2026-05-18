@@ -68,11 +68,6 @@ get_header();
 							<p><?php esc_html_e( 'The next pass should make each content type feel deliberate without making the whole page noisy. Notes can stay light. Projects can show status. Skills can feel reusable. Longform can get a little more room.', 'lab-notes' ); ?></p>
 						</div>
 					<?php endif; ?>
-
-					<aside class="post-note" aria-label="<?php esc_attr_e( 'Implementation note', 'lab-notes' ); ?>">
-						<div class="eyebrow"><?php esc_html_e( 'implementation note', 'lab-notes' ); ?></div>
-						<p><?php esc_html_e( 'This template maps the static prototype onto WordPress template data: title, excerpt, date, type, body, and related entries.', 'lab-notes' ); ?></p>
-					</aside>
 				</div>
 			</div>
 		</article>

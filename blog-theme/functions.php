@@ -59,144 +59,37 @@ function lab_notes_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'lab_notes_scripts' );
 
-function lab_notes_seed_categories() {
-	if ( get_option( 'lab_notes_seeded_categories' ) ) {
-		return;
+function lab_notes_daily_profile_image() {
+	$image_dir   = get_theme_file_path( 'assets/profile-pic' );
+	$image_paths = array();
+
+	if ( ! is_dir( $image_dir ) ) {
+		return '';
 	}
 
-	$categories = array(
-		'notes'     => __( 'Notes', 'lab-notes' ),
-		'projects'  => __( 'Projects', 'lab-notes' ),
-		'skills'    => __( 'Skills', 'lab-notes' ),
-		'longform'  => __( 'Longform', 'lab-notes' ),
-		'wordpress' => __( 'WordPress', 'lab-notes' ),
-	);
-
-	foreach ( $categories as $slug => $name ) {
-		if ( ! get_category_by_slug( $slug ) ) {
-			wp_insert_term(
-				$name,
-				'category',
-				array(
-					'slug'        => $slug,
-					'description' => sprintf(
-						/* translators: %s: category name */
-						__( 'Entries filed under %s.', 'lab-notes' ),
-						$name
-					),
-				)
-			);
-		}
-	}
-
-	update_option( 'lab_notes_seeded_categories', true );
-}
-add_action( 'init', 'lab_notes_seed_categories' );
-
-function lab_notes_seed_demo_posts() {
-	if ( get_option( 'lab_notes_seeded_demo_posts_v1' ) ) {
-		return;
-	}
-
-	$posts = array(
-		array(
-			'title'    => __( 'Block-first article templates', 'lab-notes' ),
-			'slug'     => 'block-first-article-templates',
-			'category' => 'projects',
-			'excerpt'  => __( 'A test set of reusable post structures for tutorials, field notes, and technical reviews.', 'lab-notes' ),
-			'content'  => __( 'This project explores a small library of article patterns that can be reused without making every post feel templated.', 'lab-notes' ),
-		),
-		array(
-			'title'    => __( 'Local notes to WordPress', 'lab-notes' ),
-			'slug'     => 'local-notes-to-wordpress',
-			'category' => 'projects',
-			'excerpt'  => __( 'A lightweight path for turning rough Markdown notes into edited, publishable drafts.', 'lab-notes' ),
-			'content'  => __( 'This project maps the handoff from local notes into WordPress so the publishing surface stays calm and predictable.', 'lab-notes' ),
-		),
-		array(
-			'title'    => __( 'Editorial dashboard theme', 'lab-notes' ),
-			'slug'     => 'editorial-dashboard-theme',
-			'category' => 'projects',
-			'excerpt'  => __( 'A modular theme direction that treats posts, skills, and projects as first-class objects.', 'lab-notes' ),
-			'content'  => __( 'This theme prototype turns the index into a working surface for posts, categories, projects, and reusable skills.', 'lab-notes' ),
-		),
-		array(
-			'title'    => __( 'Draft cleanup checklist', 'lab-notes' ),
-			'slug'     => 'draft-cleanup-checklist',
-			'category' => 'skills',
-			'excerpt'  => __( 'Remove throat-clearing, check headings, tighten the first paragraph.', 'lab-notes' ),
-			'content'  => __( 'A repeatable pass for making a rough technical post easier to scan before it moves into editing.', 'lab-notes' ),
-		),
-		array(
-			'title'    => __( 'Reusable code block pattern', 'lab-notes' ),
-			'slug'     => 'reusable-code-block-pattern',
-			'category' => 'skills',
-			'excerpt'  => __( 'Store language, filename, summary, and source link together.', 'lab-notes' ),
-			'content'  => __( 'A compact pattern for keeping code examples readable, attributed, and easy to migrate between drafts.', 'lab-notes' ),
-		),
-		array(
-			'title'    => __( 'Post idea intake', 'lab-notes' ),
-			'slug'     => 'post-idea-intake',
-			'category' => 'skills',
-			'excerpt'  => __( 'Capture question, example, failure mode, and next test.', 'lab-notes' ),
-			'content'  => __( 'A quick capture shape for turning loose observations into posts that have a clear reader handoff.', 'lab-notes' ),
-		),
-	);
-
-	foreach ( $posts as $post ) {
-		$existing = get_posts(
-			array(
-				'name'           => $post['slug'],
-				'post_type'      => 'post',
-				'post_status'    => 'any',
-				'posts_per_page' => 1,
-				'fields'         => 'ids',
-			)
-		);
-
-		if ( $existing ) {
+	foreach ( new DirectoryIterator( $image_dir ) as $file ) {
+		if ( $file->isDot() || ! $file->isFile() ) {
 			continue;
 		}
 
-		$category = get_category_by_slug( $post['category'] );
-		$post_id  = wp_insert_post(
-			array(
-				'post_title'   => $post['title'],
-				'post_name'    => $post['slug'],
-				'post_excerpt' => $post['excerpt'],
-				'post_content' => '<p>' . esc_html( $post['content'] ) . '</p>',
-				'post_status'  => 'draft',
-				'post_type'    => 'post',
-			)
-		);
+		$extension = strtolower( $file->getExtension() );
 
-		if ( ! is_wp_error( $post_id ) && $category ) {
-			wp_set_post_categories( $post_id, array( $category->term_id ) );
+		if ( in_array( $extension, array( 'jpg', 'jpeg', 'png', 'webp', 'gif' ), true ) ) {
+			$image_paths[] = $file->getPathname();
 		}
 	}
 
-	update_option( 'lab_notes_seeded_demo_posts_v1', true );
-}
-add_action( 'init', 'lab_notes_seed_demo_posts', 11 );
-
-function lab_notes_fallback_topics() {
-	return array(
-		array( 'label' => __( 'Notes', 'lab-notes' ), 'slug' => 'notes' ),
-		array( 'label' => __( 'Projects', 'lab-notes' ), 'slug' => 'projects' ),
-		array( 'label' => __( 'Skills', 'lab-notes' ), 'slug' => 'skills' ),
-		array( 'label' => __( 'Longform', 'lab-notes' ), 'slug' => 'longform' ),
-		array( 'label' => __( 'WordPress', 'lab-notes' ), 'slug' => 'wordpress' ),
-	);
-}
-
-function lab_notes_get_category_url( $slug ) {
-	$category = get_category_by_slug( $slug );
-
-	if ( $category ) {
-		return get_category_link( $category );
+	if ( empty( $image_paths ) ) {
+		return '';
 	}
 
-	return home_url( '/category/' . sanitize_title( $slug ) . '/' );
+	sort( $image_paths, SORT_NATURAL | SORT_FLAG_CASE );
+
+	$today = (int) current_time( 'Ymd' );
+	$index = $today % count( $image_paths );
+	$file  = basename( $image_paths[ $index ] );
+
+	return get_theme_file_uri( 'assets/profile-pic/' . $file );
 }
 
 function lab_notes_fallback_entries() {
@@ -252,23 +145,6 @@ function lab_notes_fallback_projects() {
 	);
 }
 
-function lab_notes_fallback_skills() {
-	return array(
-		array(
-			'title'       => __( 'Draft cleanup checklist', 'lab-notes' ),
-			'description' => __( 'Remove throat-clearing, check headings, tighten the first paragraph.', 'lab-notes' ),
-		),
-		array(
-			'title'       => __( 'Reusable code block pattern', 'lab-notes' ),
-			'description' => __( 'Store language, filename, summary, and source link together.', 'lab-notes' ),
-		),
-		array(
-			'title'       => __( 'Post idea intake', 'lab-notes' ),
-			'description' => __( 'Capture question, example, failure mode, and next test.', 'lab-notes' ),
-		),
-	);
-}
-
 function lab_notes_get_entry_type( $post_id ) {
 	$categories = get_the_category( $post_id );
 
@@ -315,10 +191,6 @@ function lab_notes_fallback_permalink() {
 	return home_url( '/?p=1' );
 }
 
-function lab_notes_visible_post_statuses() {
-	return current_user_can( 'edit_posts' ) ? array( 'publish', 'draft' ) : 'publish';
-}
-
 function lab_notes_category_query( $slugs, $posts_per_page = 3 ) {
 	foreach ( (array) $slugs as $slug ) {
 		$category = get_category_by_slug( $slug );
@@ -331,7 +203,6 @@ function lab_notes_category_query( $slugs, $posts_per_page = 3 ) {
 			array(
 				'cat'                 => $category->term_id,
 				'posts_per_page'      => $posts_per_page,
-				'post_status'         => lab_notes_visible_post_statuses(),
 				'ignore_sticky_posts' => true,
 			)
 		);
@@ -343,12 +214,3 @@ function lab_notes_category_query( $slugs, $posts_per_page = 3 ) {
 		)
 	);
 }
-
-function lab_notes_include_drafts_for_editors( $query ) {
-	if ( is_admin() || ! $query->is_main_query() || ! $query->is_category() || ! current_user_can( 'edit_posts' ) ) {
-		return;
-	}
-
-	$query->set( 'post_status', lab_notes_visible_post_statuses() );
-}
-add_action( 'pre_get_posts', 'lab_notes_include_drafts_for_editors' );

@@ -7,7 +7,12 @@
 ?>
 <aside class="sidebar" aria-label="<?php esc_attr_e( 'Profile and topics', 'lab-notes' ); ?>">
 	<section class="profile">
-		<div class="portrait" aria-hidden="true"></div>
+		<?php $profile_image = lab_notes_daily_profile_image(); ?>
+		<div class="portrait" aria-hidden="true">
+			<?php if ( $profile_image ) : ?>
+				<img src="<?php echo esc_url( $profile_image ); ?>" alt="">
+			<?php endif; ?>
+		</div>
 		<h2><?php echo esc_html( get_theme_mod( 'lab_notes_profile_name', 'Steve D' ) ); ?></h2>
 		<div class="handle">
 			<div class="status-dot" aria-hidden="true"></div>
@@ -18,27 +23,31 @@
 
 	<section class="stack-card" aria-label="<?php esc_attr_e( 'Topics', 'lab-notes' ); ?>">
 		<?php
-		if ( has_nav_menu( 'topics' ) ) {
-			wp_nav_menu(
-				array(
-					'theme_location' => 'topics',
-					'container'      => false,
-					'menu_class'     => 'chips',
-					'fallback_cb'    => false,
-					'depth'          => 1,
-				)
-			);
-		} else {
-			echo '<div class="chips">';
-			foreach ( lab_notes_fallback_topics() as $topic ) {
+		$categories = get_categories(
+			array(
+				'hide_empty' => true,
+				'orderby'    => 'name',
+				'order'      => 'ASC',
+			)
+		);
+
+		echo '<nav class="path-list" aria-label="' . esc_attr__( 'Categories', 'lab-notes' ) . '">';
+		if ( $categories ) {
+			foreach ( $categories as $category ) {
 				printf(
-					'<a class="chip" href="%s">%s</a>',
-					esc_url( lab_notes_get_category_url( $topic['slug'] ) ),
-					esc_html( $topic['label'] )
+					'<a class="path-link" href="%s">~/%s</a>',
+					esc_url( get_category_link( $category ) ),
+					esc_html( $category->slug )
 				);
 			}
-			echo '</div>';
+		} else {
+			printf(
+				'<a class="path-link" href="%s">%s</a>',
+				esc_url( home_url( '/' ) ),
+				esc_html__( '~/entries', 'lab-notes' )
+			);
 		}
+		echo '</nav>';
 		?>
 	</section>
 </aside>

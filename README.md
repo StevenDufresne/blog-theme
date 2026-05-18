@@ -4,7 +4,7 @@ A WordPress theme version of the static lab-notes prototype.
 
 ## Local Development
 
-The classic theme lives in `blog-theme/`. This project includes a `wp-now` script for testing that theme locally:
+The classic theme lives in `blog-theme/`. This project includes a `wp-now` script for testing that theme locally with fixture categories and posts from `wp-now/blueprint.json`:
 
 ```sh
 npm run wp-now

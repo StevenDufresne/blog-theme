@@ -23,6 +23,7 @@ $entries_query = new WP_Query(
 
 $projects_query = lab_notes_category_query( array( 'projects', 'project' ), 3 );
 $skills_query   = lab_notes_category_query( array( 'skills', 'skill' ), 3 );
+$projects_url   = get_category_by_slug( 'projects' ) ? get_category_link( get_category_by_slug( 'projects' ) ) : home_url( '/' );
 ?>
 <main class="dashboard" id="overview">
 	<?php get_sidebar(); ?>
@@ -125,7 +126,7 @@ $skills_query   = lab_notes_category_query( array( 'skills', 'skill' ), 3 );
 					<?php else : ?>
 						<?php foreach ( lab_notes_fallback_projects() as $project ) : ?>
 							<article class="repo">
-								<h3><a href="<?php echo esc_url( lab_notes_get_category_url( 'projects' ) ); ?>"><?php echo esc_html( $project['title'] ); ?></a></h3>
+								<h3><a href="<?php echo esc_url( $projects_url ); ?>"><?php echo esc_html( $project['title'] ); ?></a></h3>
 								<p><?php echo esc_html( $project['description'] ); ?></p>
 								<div class="repo-meta">
 									<?php foreach ( $project['meta'] as $meta ) : ?>
@@ -139,14 +140,14 @@ $skills_query   = lab_notes_category_query( array( 'skills', 'skill' ), 3 );
 			</div>
 		</section>
 
-		<section class="window wide" aria-labelledby="skills-title">
-			<div class="window-bar">
-				<div class="lights" aria-hidden="true"></div>
-				<div class="window-title" id="skills-title">ls ~/.claude/skills</div>
-			</div>
-			<div class="window-body">
-				<div class="timeline">
-					<?php if ( $skills_query->have_posts() ) : ?>
+		<?php if ( $skills_query->have_posts() ) : ?>
+			<section class="window wide" aria-labelledby="skills-title">
+				<div class="window-bar">
+					<div class="lights" aria-hidden="true"></div>
+					<div class="window-title" id="skills-title">ls ~/.claude/skills</div>
+				</div>
+				<div class="window-body">
+					<div class="timeline">
 						<?php
 						while ( $skills_query->have_posts() ) :
 							$skills_query->the_post();
@@ -160,20 +161,10 @@ $skills_query   = lab_notes_category_query( array( 'skills', 'skill' ), 3 );
 							</article>
 						<?php endwhile; ?>
 						<?php wp_reset_postdata(); ?>
-					<?php else : ?>
-						<?php foreach ( lab_notes_fallback_skills() as $skill ) : ?>
-							<article class="timeline-item">
-								<div class="timeline-dot" aria-hidden="true"></div>
-								<div>
-									<h3><a href="<?php echo esc_url( lab_notes_get_category_url( 'skills' ) ); ?>"><?php echo esc_html( $skill['title'] ); ?></a></h3>
-									<p><?php echo esc_html( $skill['description'] ); ?></p>
-								</div>
-							</article>
-						<?php endforeach; ?>
-					<?php endif; ?>
+					</div>
 				</div>
-			</div>
-		</section>
+			</section>
+		<?php endif; ?>
 	</section>
 </main>
 <?php
