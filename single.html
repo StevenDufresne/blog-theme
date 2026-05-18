@@ -166,8 +166,7 @@
 
     .chip,
     .mini-pill,
-    .post-meta span,
-    .back-link {
+    .post-meta span {
       display: inline-flex;
       align-items: center;
       min-height: 28px;
@@ -184,6 +183,9 @@
 
     .back-link {
       color: var(--accent);
+      font-family: var(--sans);
+      text-transform: none;
+      white-space: nowrap;
     }
 
     .main-grid {
@@ -221,6 +223,16 @@
       white-space: nowrap;
     }
 
+    .window-nav-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .title-separator {
+      color: var(--muted);
+    }
+
     .lights {
       position: relative;
       flex: 0 0 auto;
@@ -247,7 +259,6 @@
       display: grid;
       gap: 34px;
       max-width: 920px;
-      padding: clamp(18px, 4vw, 48px);
     }
 
     .post-header {
@@ -378,9 +389,6 @@
         overflow-wrap: anywhere;
       }
 
-      .post-shell {
-        padding: 18px;
-      }
     }
   </style>
 </head>
@@ -409,13 +417,14 @@
       <section class="main-grid">
         <article class="window" aria-labelledby="post-title">
           <div class="window-bar">
-            <div class="lights" aria-hidden="true"></div>
-            <div class="window-title">cat ~/entries/latest-field-report.md</div>
+            <div class="window-title window-nav-title">
+              <a class="back-link" href="index.html">Back to Index</a>
+              <span class="title-separator" aria-hidden="true">|</span>
+              <span>cat ~/entries/latest-field-report.md</span>
+            </div>
           </div>
           <div class="window-body">
             <div class="post-shell">
-              <a class="back-link" href="index.html">back to index</a>
-
               <header class="post-header">
                 <div class="post-meta">
                   <span>Field Note</span>
