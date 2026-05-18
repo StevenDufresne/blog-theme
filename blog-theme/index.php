@@ -101,10 +101,10 @@ $projects_url   = get_category_by_slug( 'projects' ) ? get_category_link( get_ca
 			</div>
 		</section>
 
-		<section class="window wide" id="projects" aria-labelledby="projects-title">
+		<section class="window wide" id="projects" aria-label="<?php esc_attr_e( 'Projects', 'lab-notes' ); ?>">
 			<div class="window-bar">
 				<div class="lights" aria-hidden="true"></div>
-				<div class="window-title" id="projects-title">ls ~/github/projects</div>
+				<?php // <div class="window-title" id="projects-title">ls ~/github/projects</div> ?>
 			</div>
 			<div class="window-body">
 				<div class="repo-grid">

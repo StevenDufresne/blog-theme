@@ -6,6 +6,12 @@
  */
 
 get_header();
+
+$current_post_slug = get_queried_object_id() ? get_post_field( 'post_name', get_queried_object_id() ) : '';
+$related_command   = sprintf(
+	'find ~/entries -type f -not -name %s',
+	$current_post_slug ? $current_post_slug : __( 'current', 'lab-notes' )
+);
 ?>
 <main class="dashboard">
 	<?php get_sidebar(); ?>
@@ -75,7 +81,7 @@ get_header();
 		<section class="window" aria-labelledby="related-title">
 			<div class="window-bar">
 				<div class="lights" aria-hidden="true"></div>
-				<div class="window-title" id="related-title">find ~/entries -type f -not -name latest</div>
+				<div class="window-title" id="related-title"><?php echo esc_html( $related_command ); ?></div>
 			</div>
 			<div class="window-body">
 				<div class="related-list">
