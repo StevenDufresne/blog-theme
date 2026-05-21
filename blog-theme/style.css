@@ -619,6 +619,32 @@ img {
     min-height: 0;
   }
 
+  .style-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .style-link {
+    display: inline-flex;
+    width: 30px;
+    height: 22px;
+  }
+
+  .style-name {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .style-swatch {
+    width: 30px;
+    height: 22px;
+  }
+
   .article-row,
   .repo,
   .timeline-item {
