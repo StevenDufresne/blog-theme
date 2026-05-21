@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "title": "Candy Shell",
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "slug": "background",
+          "color": "#fff7fb",
+          "name": "Background"
+        },
+        {
+          "slug": "text",
+          "color": "#1c1320",
+          "name": "Text"
+        },
+        {
+          "slug": "muted",
+          "color": "#8c627f",
+          "name": "Muted"
+        },
+        {
+          "slug": "body",
+          "color": "#4d3949",
+          "name": "Body"
+        },
+        {
+          "slug": "panel",
+          "color": "#ffffff",
+          "name": "Panel"
+        },
+        {
+          "slug": "accent",
+          "color": "#ff3ea5",
+          "name": "Accent"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "#fff7fb",
+      "text": "#1c1320"
+    }
+  }
+}

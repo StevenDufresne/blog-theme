@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "title": "Matrix Lime",
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "slug": "background",
+          "color": "#030805",
+          "name": "Background"
+        },
+        {
+          "slug": "text",
+          "color": "#e8ffe7",
+          "name": "Text"
+        },
+        {
+          "slug": "muted",
+          "color": "#80a987",
+          "name": "Muted"
+        },
+        {
+          "slug": "body",
+          "color": "#b8d9bd",
+          "name": "Body"
+        },
+        {
+          "slug": "panel",
+          "color": "#06110a",
+          "name": "Panel"
+        },
+        {
+          "slug": "accent",
+          "color": "#54f071",
+          "name": "Accent"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "#030805",
+      "text": "#e8ffe7"
+    }
+  }
+}

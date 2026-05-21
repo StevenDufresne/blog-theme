@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "title": "Cobalt Daybreak",
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "slug": "background",
+          "color": "#f8fbff",
+          "name": "Background"
+        },
+        {
+          "slug": "text",
+          "color": "#111fa2",
+          "name": "Text"
+        },
+        {
+          "slug": "muted",
+          "color": "#5478ff",
+          "name": "Muted"
+        },
+        {
+          "slug": "body",
+          "color": "#1d318f",
+          "name": "Body"
+        },
+        {
+          "slug": "panel",
+          "color": "#ffffff",
+          "name": "Panel"
+        },
+        {
+          "slug": "accent",
+          "color": "#ffde42",
+          "name": "Accent"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "#f8fbff",
+      "text": "#111fa2"
+    }
+  }
+}

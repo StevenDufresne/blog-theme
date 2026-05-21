@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "title": "Amber Terminal",
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "slug": "background",
+          "color": "#0b0905",
+          "name": "Background"
+        },
+        {
+          "slug": "text",
+          "color": "#fff4dc",
+          "name": "Text"
+        },
+        {
+          "slug": "muted",
+          "color": "#b79e72",
+          "name": "Muted"
+        },
+        {
+          "slug": "body",
+          "color": "#d7c6a8",
+          "name": "Body"
+        },
+        {
+          "slug": "panel",
+          "color": "#100c06",
+          "name": "Panel"
+        },
+        {
+          "slug": "accent",
+          "color": "#ffb94e",
+          "name": "Accent"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "#0b0905",
+      "text": "#fff4dc"
+    }
+  }
+}

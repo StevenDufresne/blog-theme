@@ -12,13 +12,14 @@ Text Domain: lab-notes
 
 :root {
   color-scheme: dark;
-  --bg: #090909;
-  --text: #eeeeea;
-  --muted: #9aa3a3;
-  --body: #b9beb9;
+  --bg: var(--wp--preset--color--background, #090909);
+  --text: var(--wp--preset--color--text, #eeeeea);
+  --muted: var(--wp--preset--color--muted, #9aa3a3);
+  --body: var(--wp--preset--color--body, #b9beb9);
   --line: rgba(255, 255, 255, 0.075);
-  --accent: #d7e82a;
-  --panel: #090909;
+  --line: color-mix(in srgb, var(--text) 8%, transparent);
+  --accent: var(--wp--preset--color--accent, #d7e82a);
+  --panel: var(--wp--preset--color--panel, #090909);
   --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
   --radius: 6px;
   --sans: "Noto Sans", "Inter", "Helvetica Neue", Arial, ui-sans-serif, system-ui, sans-serif;
@@ -64,6 +65,13 @@ img {
   width: min(1540px, 100%);
   margin: 0 auto;
   padding: 54px;
+}
+
+.app-shell > *,
+.dashboard > *,
+.main-grid > *,
+.wp-block-template-part {
+  margin-block-start: 0;
 }
 
 .dashboard {
@@ -125,6 +133,7 @@ img {
 
 .handle,
 .window-title,
+.stack-title,
 .note-meta,
 .date,
 .count,
@@ -189,10 +198,52 @@ img {
   gap: 12px;
 }
 
-.path-link {
+.stack-title {
+  font-family: var(--mono);
+}
+
+.style-list {
+  display: grid;
+  gap: 10px;
+}
+
+.path-link,
+.style-link {
   color: var(--muted);
   font-size: 0.84rem;
   line-height: 1.35;
+}
+
+.style-link {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  text-decoration: none;
+}
+
+.style-link:hover,
+.style-link[aria-current="true"] {
+  color: var(--text);
+}
+
+.style-swatch {
+  width: 30px;
+  height: 18px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background:
+    linear-gradient(135deg, var(--style-bg) 0 48%, var(--style-accent) 48% 68%, var(--style-text) 68% 100%);
+}
+
+.style-link[aria-current="true"] .style-swatch {
+  border-color: var(--accent);
+}
+
+.style-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .mini-pill,

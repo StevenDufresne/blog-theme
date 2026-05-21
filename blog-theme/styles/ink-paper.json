@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "title": "Ink Paper",
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "slug": "background",
+          "color": "#f2efe7",
+          "name": "Background"
+        },
+        {
+          "slug": "text",
+          "color": "#171614",
+          "name": "Text"
+        },
+        {
+          "slug": "muted",
+          "color": "#706c62",
+          "name": "Muted"
+        },
+        {
+          "slug": "body",
+          "color": "#403d36",
+          "name": "Body"
+        },
+        {
+          "slug": "panel",
+          "color": "#fffaf0",
+          "name": "Panel"
+        },
+        {
+          "slug": "accent",
+          "color": "#b54f2b",
+          "name": "Accent"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "#f2efe7",
+      "text": "#171614"
+    }
+  }
+}

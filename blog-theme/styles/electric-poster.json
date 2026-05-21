@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "title": "Electric Poster",
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "slug": "background",
+          "color": "#12002f",
+          "name": "Background"
+        },
+        {
+          "slug": "text",
+          "color": "#fff9ff",
+          "name": "Text"
+        },
+        {
+          "slug": "muted",
+          "color": "#bca7ff",
+          "name": "Muted"
+        },
+        {
+          "slug": "body",
+          "color": "#e3d8ff",
+          "name": "Body"
+        },
+        {
+          "slug": "panel",
+          "color": "#1a0644",
+          "name": "Panel"
+        },
+        {
+          "slug": "accent",
+          "color": "#00f0ff",
+          "name": "Accent"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "#12002f",
+      "text": "#fff9ff"
+    }
+  }
+}

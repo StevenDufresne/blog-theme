@@ -21,6 +21,16 @@
           "name": "Muted"
         },
         {
+          "slug": "body",
+          "color": "#b9beb9",
+          "name": "Body"
+        },
+        {
+          "slug": "panel",
+          "color": "#090909",
+          "name": "Panel"
+        },
+        {
           "slug": "accent",
           "color": "#d7e82a",
           "name": "Accent"
@@ -62,5 +72,12 @@
     "typography": {
       "fontFamily": "var(--wp--preset--font-family--noto-sans)"
     }
-  }
+  },
+  "templateParts": [
+    {
+      "name": "sidebar",
+      "title": "Sidebar",
+      "area": "uncategorized"
+    }
+  ]
 }

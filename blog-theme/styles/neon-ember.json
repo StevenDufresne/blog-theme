@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "title": "Neon Ember",
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "slug": "background",
+          "color": "#1a05a2",
+          "name": "Background"
+        },
+        {
+          "slug": "text",
+          "color": "#fff4f0",
+          "name": "Text"
+        },
+        {
+          "slug": "muted",
+          "color": "#f67d31",
+          "name": "Muted"
+        },
+        {
+          "slug": "body",
+          "color": "#ffd0c2",
+          "name": "Body"
+        },
+        {
+          "slug": "panel",
+          "color": "#8f0177",
+          "name": "Panel"
+        },
+        {
+          "slug": "accent",
+          "color": "#de1a58",
+          "name": "Accent"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "#1a05a2",
+      "text": "#fff4f0"
+    }
+  }
+}
