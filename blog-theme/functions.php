@@ -694,7 +694,7 @@ function lab_notes_render_single_content_block() {
 			</div>
 		</article>
 
-		<section class="window" aria-labelledby="related-title">
+		<!-- <section class="window" aria-labelledby="related-title">
 			<div class="window-bar">
 				<div class="lights" aria-hidden="true"></div>
 				<div class="window-title" id="related-title"><?php echo esc_html( $related_command ); ?></div>
@@ -713,7 +713,7 @@ function lab_notes_render_single_content_block() {
 					<?php endforeach; ?>
 				</div>
 			</div>
-		</section>
+		</section> -->
 	</section>
 	<?php
 
