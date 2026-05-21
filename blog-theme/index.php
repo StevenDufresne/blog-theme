@@ -100,11 +100,11 @@ $projects_url   = get_category_by_slug( 'projects' ) ? get_category_link( get_ca
 				</div>
 			</div>
 		</section>
-
+<!-- 
 		<section class="window wide" id="projects" aria-label="<?php esc_attr_e( 'Projects', 'lab-notes' ); ?>">
 			<div class="window-bar">
 				<div class="lights" aria-hidden="true"></div>
-				<?php // <div class="window-title" id="projects-title">ls ~/github/projects</div> ?>
+				<div class="window-title" id="projects-title">ls ~/github/projects</div>
 			</div>
 			<div class="window-body">
 				<div class="repo-grid">
@@ -138,7 +138,7 @@ $projects_url   = get_category_by_slug( 'projects' ) ? get_category_link( get_ca
 					<?php endif; ?>
 				</div>
 			</div>
-		</section>
+		</section> -->
 
 		<?php if ( $skills_query->have_posts() ) : ?>
 			<section class="window wide" aria-labelledby="skills-title">
