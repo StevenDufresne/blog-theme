@@ -281,59 +281,6 @@ function lab_notes_daily_profile_image() {
 	return get_theme_file_uri( 'assets/profile-pic/' . $file );
 }
 
-function lab_notes_fallback_entries() {
-	return array(
-		array(
-			'type'        => __( 'Note', 'lab-notes' ),
-			'type_class'  => 'note',
-			'title'       => __( 'What I changed after a week of writing in blocks', 'lab-notes' ),
-			'description' => __( 'A short field note on simplifying drafts, reusable sections, and the limits of block patterns.', 'lab-notes' ),
-			'date'        => '05/17/2026',
-		),
-		array(
-			'type'        => __( 'Project', 'lab-notes' ),
-			'type_class'  => 'project',
-			'title'       => __( 'Testing a no-dashboard WordPress author flow', 'lab-notes' ),
-			'description' => __( 'A prototype for moving from local notes to publishable entries with fewer admin screens.', 'lab-notes' ),
-			'date'        => '05/12/2026',
-		),
-		array(
-			'type'        => __( 'Skill', 'lab-notes' ),
-			'type_class'  => 'skill',
-			'title'       => __( 'A tiny checklist for publishing technical posts', 'lab-notes' ),
-			'description' => __( 'A reusable review pass for examples, assumptions, screenshots, and reader handoff.', 'lab-notes' ),
-			'date'        => '05/09/2026',
-		),
-		array(
-			'type'        => __( 'Longform', 'lab-notes' ),
-			'type_class'  => 'long',
-			'title'       => __( 'The difference between a website and a working surface', 'lab-notes' ),
-			'description' => __( 'A longer essay about interfaces that support ongoing work instead of one-time visits.', 'lab-notes' ),
-			'date'        => '05/01/2026',
-		),
-	);
-}
-
-function lab_notes_fallback_projects() {
-	return array(
-		array(
-			'title'       => __( 'Block-first article templates', 'lab-notes' ),
-			'description' => __( 'A test set of reusable post structures for tutorials, field notes, and technical reviews.', 'lab-notes' ),
-			'meta'        => array( __( 'Project', 'lab-notes' ), __( 'Active', 'lab-notes' ) ),
-		),
-		array(
-			'title'       => __( 'Local notes to WordPress', 'lab-notes' ),
-			'description' => __( 'A lightweight path for turning rough Markdown notes into edited, publishable drafts.', 'lab-notes' ),
-			'meta'        => array( __( 'Prototype', 'lab-notes' ), __( 'Drafting', 'lab-notes' ) ),
-		),
-		array(
-			'title'       => __( 'Editorial dashboard theme', 'lab-notes' ),
-			'description' => __( 'A modular theme direction that treats posts, skills, and projects as first-class objects.', 'lab-notes' ),
-			'meta'        => array( __( 'Theme', 'lab-notes' ), __( 'Designing', 'lab-notes' ) ),
-		),
-	);
-}
-
 function lab_notes_get_entry_type( $post_id ) {
 	$categories = get_the_category( $post_id );
 
@@ -367,17 +314,13 @@ function lab_notes_get_category_names( $post_id ) {
 	$categories = get_the_category( $post_id );
 
 	if ( empty( $categories ) ) {
-		return __( 'Web Workflows', 'lab-notes' );
+		return __( 'Entry', 'lab-notes' );
 	}
 
 	return implode(
 		', ',
 		wp_list_pluck( $categories, 'name' )
 	);
-}
-
-function lab_notes_fallback_permalink() {
-	return home_url( '/?p=1' );
 }
 
 function lab_notes_category_query( $slugs, $posts_per_page = 3 ) {
@@ -544,12 +487,12 @@ function lab_notes_render_index_content_block() {
 					<?php wp_reset_postdata(); ?>
 				<?php else : ?>
 					<div class="note-meta">
-						<span><?php esc_html_e( 'Field Note', 'lab-notes' ); ?></span>
-						<span>2026-05-17</span>
-						<span><?php esc_html_e( 'Web Workflows', 'lab-notes' ); ?></span>
+						<span><?php esc_html_e( 'Empty', 'lab-notes' ); ?></span>
+						<span>--</span>
+						<span><?php esc_html_e( 'Entries', 'lab-notes' ); ?></span>
 					</div>
-					<h2><a class="feature-title-link" href="<?php echo esc_url( lab_notes_fallback_permalink() ); ?>"><?php esc_html_e( 'Building a calmer publishing workflow inside WordPress', 'lab-notes' ); ?></a></h2>
-					<p><?php esc_html_e( 'What changed after treating the editor like a workspace instead of a form: fewer decisions, cleaner drafts, and a better path from rough notes to finished posts.', 'lab-notes' ); ?></p>
+					<h2><?php esc_html_e( 'No entries yet', 'lab-notes' ); ?></h2>
+					<p><?php esc_html_e( 'Publish a post and it will appear here automatically.', 'lab-notes' ); ?></p>
 				<?php endif; ?>
 			</div>
 		</section>
@@ -579,17 +522,15 @@ function lab_notes_render_index_content_block() {
 						<?php endwhile; ?>
 						<?php wp_reset_postdata(); ?>
 					<?php else : ?>
-						<?php foreach ( lab_notes_fallback_entries() as $entry ) : ?>
-							<div class="article-row">
-								<div class="type-dot <?php echo esc_attr( $entry['type_class'] ); ?>" aria-hidden="true"></div>
-								<div class="entry-copy">
-									<span class="date"><?php echo esc_html( $entry['type'] ); ?></span>
-									<h3><a href="<?php echo esc_url( lab_notes_fallback_permalink() ); ?>"><?php echo esc_html( $entry['title'] ); ?></a></h3>
-									<p><?php echo esc_html( $entry['description'] ); ?></p>
-								</div>
-								<span class="count"><?php echo esc_html( $entry['date'] ); ?></span>
+						<div class="article-row">
+							<div class="type-dot note" aria-hidden="true"></div>
+							<div class="entry-copy">
+								<span class="date"><?php esc_html_e( 'Empty', 'lab-notes' ); ?></span>
+								<h3><?php esc_html_e( 'No entries yet', 'lab-notes' ); ?></h3>
+								<p><?php esc_html_e( 'Publish a post and it will show up in this list.', 'lab-notes' ); ?></p>
 							</div>
-						<?php endforeach; ?>
+							<span class="count">--</span>
+						</div>
 					<?php endif; ?>
 				</div>
 			</div>
@@ -627,8 +568,9 @@ function lab_notes_render_index_content_block() {
 }
 
 function lab_notes_render_single_content_block() {
-	$entry_command   = sprintf( 'cat ~/entries/%s.md', lab_notes_command_target() );
-	$related_command = sprintf( 'find ~/entries -type f -not -name %s', lab_notes_command_target() );
+	$post_id       = get_queried_object_id();
+	$current_post  = $post_id ? get_post( $post_id ) : null;
+	$entry_command = sprintf( 'cat ~/entries/%s.md', lab_notes_command_target() );
 
 	ob_start();
 	?>
@@ -643,77 +585,44 @@ function lab_notes_render_single_content_block() {
 			</div>
 			<div class="window-body">
 				<div class="post-shell">
-					<?php if ( have_posts() ) : ?>
+					<?php if ( $current_post instanceof WP_Post ) : ?>
 						<?php
-						while ( have_posts() ) :
-							the_post();
-							$entry_type = lab_notes_get_entry_type( get_the_ID() );
-							?>
-							<header class="post-header">
-								<div class="post-meta">
-									<span><?php echo esc_html( $entry_type['label'] ); ?></span>
-									<span><?php echo esc_html( get_the_date( 'Y-m-d' ) ); ?></span>
-									<span><?php esc_html_e( 'Entry', 'lab-notes' ); ?></span>
-								</div>
-								<h1 class="post-title" id="post-title"><?php the_title(); ?></h1>
-								<?php if ( has_excerpt() ) : ?>
-									<p class="post-dek"><?php echo esc_html( get_the_excerpt() ); ?></p>
-								<?php endif; ?>
-							</header>
-
-							<div class="post-body">
-								<?php the_content(); ?>
-							</div>
-						<?php endwhile; ?>
-					<?php else : ?>
+						setup_postdata( $current_post );
+						$entry_type       = lab_notes_get_entry_type( $current_post->ID );
+						$post_type_object = get_post_type_object( get_post_type( $current_post ) );
+						$post_type_label  = $post_type_object ? $post_type_object->labels->singular_name : __( 'Entry', 'lab-notes' );
+						?>
 						<header class="post-header">
 							<div class="post-meta">
-								<span><?php esc_html_e( 'Field Note', 'lab-notes' ); ?></span>
-								<span>2026-05-17</span>
-								<span><?php esc_html_e( '8 min', 'lab-notes' ); ?></span>
+								<span><?php echo esc_html( $entry_type['label'] ); ?></span>
+								<span><?php echo esc_html( get_the_date( 'Y-m-d', $current_post ) ); ?></span>
+								<span><?php echo esc_html( $post_type_label ); ?></span>
 							</div>
-							<h1 class="post-title" id="post-title"><?php esc_html_e( 'Building a calmer publishing workflow inside WordPress', 'lab-notes' ); ?></h1>
-							<p class="post-dek"><?php esc_html_e( 'What changed after treating the editor like a workspace instead of a form: fewer decisions, cleaner drafts, and a better path from rough notes to finished posts.', 'lab-notes' ); ?></p>
+							<h1 class="post-title" id="post-title"><?php echo esc_html( get_the_title( $current_post ) ); ?></h1>
+							<?php if ( has_excerpt( $current_post ) ) : ?>
+								<p class="post-dek"><?php echo esc_html( get_the_excerpt( $current_post ) ); ?></p>
+							<?php endif; ?>
 						</header>
 
 						<div class="post-body">
-							<p><?php esc_html_e( 'The useful shift was small: stop asking the admin screen to be everything. I wanted the writing surface to feel closer to a working notebook, where structure appears when it helps and gets out of the way when it does not.', 'lab-notes' ); ?></p>
-							<p><?php esc_html_e( 'That meant designing around the handful of states a post actually moves through: rough capture, shaped outline, checked examples, edited draft, and published reference. The interface became calmer once each state had an obvious place to live.', 'lab-notes' ); ?></p>
-							<h2><?php esc_html_e( 'What Stayed', 'lab-notes' ); ?></h2>
-							<p><?php esc_html_e( 'The core WordPress model still makes sense. Posts, categories, reusable blocks, and custom fields are enough for most of this. The theme should expose those pieces clearly instead of inventing a second editorial system on top.', 'lab-notes' ); ?></p>
-							<h2><?php esc_html_e( 'What Changed', 'lab-notes' ); ?></h2>
-							<ul>
-								<li><?php esc_html_e( 'Post links lead with the title, not the surrounding card.', 'lab-notes' ); ?></li>
-								<li><?php esc_html_e( 'Entry types use small visual markers instead of heavy badges.', 'lab-notes' ); ?></li>
-								<li><?php esc_html_e( 'Metadata stays visible, but it does not compete with the writing.', 'lab-notes' ); ?></li>
-							</ul>
-							<p><?php esc_html_e( 'The next pass should make each content type feel deliberate without making the whole page noisy. Notes can stay light. Projects can show status. Skills can feel reusable. Longform can get a little more room.', 'lab-notes' ); ?></p>
+							<?php echo apply_filters( 'the_content', $current_post->post_content ); ?>
 						</div>
+						<?php wp_reset_postdata(); ?>
+					<?php else : ?>
+						<header class="post-header">
+							<div class="post-meta">
+								<span><?php esc_html_e( 'Missing', 'lab-notes' ); ?></span>
+								<span>--</span>
+								<span><?php esc_html_e( 'Entry', 'lab-notes' ); ?></span>
+							</div>
+							<h1 class="post-title" id="post-title"><?php esc_html_e( 'No content found', 'lab-notes' ); ?></h1>
+							<p class="post-dek"><?php esc_html_e( 'WordPress did not provide a post or page for this view.', 'lab-notes' ); ?></p>
+						</header>
 					<?php endif; ?>
 				</div>
 			</div>
 		</article>
 
-		<!-- <section class="window" aria-labelledby="related-title">
-			<div class="window-bar">
-				<div class="lights" aria-hidden="true"></div>
-				<div class="window-title" id="related-title"><?php echo esc_html( $related_command ); ?></div>
-			</div>
-			<div class="window-body">
-				<div class="related-list">
-					<?php foreach ( array_slice( lab_notes_fallback_entries(), 0, 3 ) as $entry ) : ?>
-						<article class="related-item">
-							<div class="type-dot <?php echo esc_attr( $entry['type_class'] ); ?>" aria-hidden="true"></div>
-							<div class="related-copy">
-								<span class="related-meta"><?php echo esc_html( $entry['type'] ); ?></span>
-								<h3><a href="<?php echo esc_url( home_url( '/?s=' . rawurlencode( $entry['title'] ) ) ); ?>"><?php echo esc_html( $entry['title'] ); ?></a></h3>
-								<p><?php echo esc_html( $entry['description'] ); ?></p>
-							</div>
-						</article>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		</section> -->
 	</section>
 	<?php
 
