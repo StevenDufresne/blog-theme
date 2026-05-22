@@ -599,6 +599,11 @@ function lab_notes_render_single_content_block() {
 								<span><?php echo esc_html( $post_type_label ); ?></span>
 							</div>
 							<h1 class="post-title" id="post-title"><?php echo esc_html( get_the_title( $current_post ) ); ?></h1>
+							<?php if ( has_post_thumbnail( $current_post ) ) : ?>
+								<figure class="post-feature-image">
+									<?php echo get_the_post_thumbnail( $current_post, 'large' ); ?>
+								</figure>
+							<?php endif; ?>
 							<?php if ( has_excerpt( $current_post ) ) : ?>
 								<p class="post-dek"><?php echo esc_html( get_the_excerpt( $current_post ) ); ?></p>
 							<?php endif; ?>
