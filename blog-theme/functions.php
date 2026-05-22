@@ -359,6 +359,24 @@ function lab_notes_command_target( $fallback = 'current' ) {
 	return $slug ? $slug : $fallback;
 }
 
+function lab_notes_remove_duplicate_feature_image( $content, $post_id ) {
+	if ( ! has_post_thumbnail( $post_id ) ) {
+		return $content;
+	}
+
+	$thumbnail_id = (int) get_post_thumbnail_id( $post_id );
+
+	if ( ! $thumbnail_id ) {
+		return $content;
+	}
+
+	$thumbnail_class = preg_quote( 'wp-image-' . $thumbnail_id, '/' );
+	$pattern         = '/\s*(?:<figure\b[^>]*>\s*)?(?:<a\b[^>]*>\s*)?<img\b[^>]*\bclass=(["\'][^"\']*' . $thumbnail_class . '[^"\']*["\'])[^>]*>\s*(?:<\/a>\s*)?(?:<figcaption\b[^>]*>.*?<\/figcaption>\s*)?(?:<\/figure>\s*)?/is';
+	$content         = preg_replace( $pattern, '', $content, 1 );
+
+	return null === $content ? '' : $content;
+}
+
 function lab_notes_render_sidebar_block() {
 	ob_start();
 	?>
@@ -610,7 +628,7 @@ function lab_notes_render_single_content_block() {
 						</header>
 
 						<div class="post-body">
-							<?php echo apply_filters( 'the_content', $current_post->post_content ); ?>
+							<?php echo lab_notes_remove_duplicate_feature_image( apply_filters( 'the_content', $current_post->post_content ), $current_post->ID ); ?>
 						</div>
 						<?php wp_reset_postdata(); ?>
 					<?php else : ?>
