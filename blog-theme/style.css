@@ -574,6 +574,24 @@ img {
   font-size: 0.84em;
 }
 
+.post-body pre,
+.post-body .wp-block-code,
+.post-body [class*="code-block"] {
+  max-width: 100%;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+}
+
+.post-body pre,
+.post-body pre code,
+.post-body .wp-block-code code,
+.post-body [class*="code-block"] pre,
+.post-body [class*="code-block"] code {
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
 .post-note {
   display: grid;
   gap: 10px;
