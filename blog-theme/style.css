@@ -578,18 +578,24 @@ img {
 .post-body .wp-block-code,
 .post-body [class*="code-block"] {
   max-width: 100%;
+  min-width: 0;
   overflow-x: auto !important;
   overflow-y: visible !important;
 }
 
 .post-body pre,
 .post-body pre code,
+.post-body pre code *,
+.post-body .wp-block-code,
 .post-body .wp-block-code code,
+.post-body .wp-block-code code *,
 .post-body [class*="code-block"] pre,
-.post-body [class*="code-block"] code {
+.post-body [class*="code-block"] pre *,
+.post-body [class*="code-block"] code,
+.post-body [class*="code-block"] code * {
   white-space: pre-wrap !important;
   overflow-wrap: anywhere;
-  word-break: normal;
+  word-break: break-word;
 }
 
 .post-note {
